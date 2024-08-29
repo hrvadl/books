@@ -15,7 +15,7 @@ import (
 
 func TestAddBook(t *testing.T) {
 	type fields struct {
-		books func(*gomock.Controller) book.BookSaver
+		books func(*gomock.Controller) book.BookSource
 	}
 
 	type args struct {
@@ -47,7 +47,7 @@ func TestAddBook(t *testing.T) {
 				},
 			},
 			fields: fields{
-				books: func(c *gomock.Controller) book.BookSaver {
+				books: func(c *gomock.Controller) book.BookSource {
 					book := book.Book{
 						Authors: []author.Author{
 							{
@@ -59,7 +59,7 @@ func TestAddBook(t *testing.T) {
 							},
 						},
 					}
-					s := mocks.NewMockBookSaver(c)
+					s := mocks.NewMockBookSource(c)
 					s.EXPECT().Save(gomock.Any(), book).Times(1).Return(1, nil)
 					return s
 				},
@@ -84,7 +84,7 @@ func TestAddBook(t *testing.T) {
 				},
 			},
 			fields: fields{
-				books: func(c *gomock.Controller) book.BookSaver {
+				books: func(c *gomock.Controller) book.BookSource {
 					book := book.Book{
 						Authors: []author.Author{
 							{
@@ -96,7 +96,7 @@ func TestAddBook(t *testing.T) {
 							},
 						},
 					}
-					s := mocks.NewMockBookSaver(c)
+					s := mocks.NewMockBookSource(c)
 					s.EXPECT().Save(gomock.Any(), book).Times(1).Return(0, errors.New("failed"))
 					return s
 				},
@@ -117,6 +117,91 @@ func TestAddBook(t *testing.T) {
 			}
 
 			require.Equal(t, tt.want, id)
+		})
+	}
+}
+
+func TestServiceGetAll(t *testing.T) {
+	type fields struct {
+		books func(*gomock.Controller) book.BookSource
+	}
+
+	type args struct {
+		ctx context.Context
+	}
+
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    []book.Book
+		wantErr bool
+	}{
+		{
+			name: "Should return books",
+			fields: fields{
+				books: func(c *gomock.Controller) book.BookSource {
+					s := mocks.NewMockBookSource(c)
+					s.EXPECT().GetAll(context.Background()).Times(1).Return([]book.Book{
+						{
+							ID:    1,
+							Title: "Test",
+						},
+						{
+							ID:    2,
+							Title: "Test 2",
+						},
+					}, nil)
+					return s
+				},
+			},
+			args: args{
+				ctx: context.Background(),
+			},
+			want: []book.Book{
+				{
+					ID:    1,
+					Title: "Test",
+				},
+				{
+					ID:    2,
+					Title: "Test 2",
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "Should return domain error when source failed",
+			fields: fields{
+				books: func(c *gomock.Controller) book.BookSource {
+					s := mocks.NewMockBookSource(c)
+					s.EXPECT().
+						GetAll(context.Background()).
+						Times(1).
+						Return(nil, errors.New("failed"))
+					return s
+				},
+			},
+			args: args{
+				ctx: context.Background(),
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			s := book.NewService(tt.fields.books(gomock.NewController(t)))
+			got, err := s.GetAll(tt.args.ctx)
+
+			if tt.wantErr {
+				require.ErrorIs(t, err, book.ErrFailedToGet)
+				return
+			}
+
+			require.NoError(t, err)
+			require.Equal(t, got, tt.want)
 		})
 	}
 }
