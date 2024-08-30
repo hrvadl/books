@@ -28,7 +28,7 @@ func NewService(rs ReviewSource, rhs ReadingHistorySource, us UserSource, bs Boo
 
 //go:generate mockgen -destination=./mocks/mock_reviews.go -package=mocks . ReviewSource
 type ReviewSource interface {
-	GetAllByUserID(ctx context.Context, userID int) ([]review.Review, error)
+	GetByUserID(ctx context.Context, userID int) ([]review.Review, error)
 }
 
 //go:generate mockgen -destination=./mocks/mock_history.go -package=mocks . ReadingHistorySource
@@ -54,7 +54,7 @@ type Service struct {
 }
 
 func (s *Service) GetRecommendedBookFor(ctx context.Context, userID int) (*book.Book, error) {
-	reviews, err := s.reviews.GetAllByUserID(ctx, userID)
+	reviews, err := s.reviews.GetByUserID(ctx, userID)
 	if err != nil {
 		return nil, errors.Join(ErrFailedToGet, err)
 	}
