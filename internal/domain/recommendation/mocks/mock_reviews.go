@@ -40,17 +40,17 @@ func (m *MockReviewSource) EXPECT() *MockReviewSourceMockRecorder {
 	return m.recorder
 }
 
-// GetAllByUserID mocks base method.
-func (m *MockReviewSource) GetAllByUserID(arg0 context.Context, arg1 int) ([]review.Review, error) {
+// GetByUserID mocks base method.
+func (m *MockReviewSource) GetByUserID(arg0 context.Context, arg1 int) ([]review.Review, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAllByUserID", arg0, arg1)
+	ret := m.ctrl.Call(m, "GetByUserID", arg0, arg1)
 	ret0, _ := ret[0].([]review.Review)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetAllByUserID indicates an expected call of GetAllByUserID.
-func (mr *MockReviewSourceMockRecorder) GetAllByUserID(arg0, arg1 any) *gomock.Call {
+// GetByUserID indicates an expected call of GetByUserID.
+func (mr *MockReviewSourceMockRecorder) GetByUserID(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllByUserID", reflect.TypeOf((*MockReviewSource)(nil).GetAllByUserID), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByUserID", reflect.TypeOf((*MockReviewSource)(nil).GetByUserID), arg0, arg1)
 }
