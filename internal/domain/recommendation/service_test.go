@@ -125,7 +125,7 @@ func TestGetRecommendedBook(t *testing.T) {
 				reviews: func(c *gomock.Controller) recommendation.ReviewSource {
 					s := mocks.NewMockReviewSource(c)
 					s.EXPECT().
-						GetAllByUserID(context.Background(), 1).
+						GetByUserID(context.Background(), 1).
 						Times(1).
 						Return([]review.Review{
 							{
