@@ -3,15 +3,16 @@ module github.com/hrvadl/book-service
 go 1.22.5
 
 require (
+	github.com/caarlos0/env/v11 v11.2.2
+	github.com/gofiber/fiber/v3 v3.0.0-beta.3
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/mock v0.4.0
+	golang.org/x/exp v0.0.0-20240823005443-9b4947da3948
 )
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/caarlos0/env/v11 v11.2.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/gofiber/fiber/v3 v3.0.0-beta.3 // indirect
 	github.com/gofiber/utils/v2 v2.0.0-beta.6 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect

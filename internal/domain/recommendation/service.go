@@ -5,6 +5,8 @@ import (
 	"errors"
 	"slices"
 
+	"golang.org/x/exp/maps"
+
 	"github.com/hrvadl/book-service/internal/domain/book"
 	"github.com/hrvadl/book-service/internal/domain/history"
 	"github.com/hrvadl/book-service/internal/domain/review"
@@ -132,10 +134,5 @@ func (s *Service) getLikedAuthors(reviews []review.Review) []int {
 		}
 	}
 
-	likedAuthorsRes := make([]int, 0, len(likedAuthors))
-	for a := range likedAuthors {
-		likedAuthorsRes = append(likedAuthorsRes, a)
-	}
-
-	return likedAuthorsRes
+	return maps.Keys(likedAuthors)
 }
