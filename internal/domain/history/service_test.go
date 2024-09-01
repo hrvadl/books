@@ -13,6 +13,7 @@ import (
 )
 
 func TestHistoryGetByUserID(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		userID int

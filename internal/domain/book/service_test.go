@@ -14,6 +14,7 @@ import (
 )
 
 func TestAddBook(t *testing.T) {
+	t.Parallel()
 	type fields struct {
 		books func(*gomock.Controller) book.BookSource
 	}
@@ -122,6 +123,7 @@ func TestAddBook(t *testing.T) {
 }
 
 func TestServiceGetAll(t *testing.T) {
+	t.Parallel()
 	type fields struct {
 		books func(*gomock.Controller) book.BookSource
 	}
@@ -201,7 +203,7 @@ func TestServiceGetAll(t *testing.T) {
 			}
 
 			require.NoError(t, err)
-			require.Equal(t, got, tt.want)
+			require.Equal(t, tt.want, got)
 		})
 	}
 }

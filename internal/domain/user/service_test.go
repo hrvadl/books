@@ -13,6 +13,7 @@ import (
 )
 
 func TestServiceGetByID(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx context.Context
 		id  int

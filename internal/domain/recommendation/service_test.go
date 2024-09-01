@@ -96,6 +96,7 @@ var books = []book.Book{
 }
 
 func TestGetRecommendedBook(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		userID int

@@ -116,13 +116,17 @@ func (s *Service) getBookWithPrefferedGenresOrAuthors(
 }
 
 func (s *Service) getUnreadBooks(history []history.ReadingHistory, books []book.Book) []book.Book {
-	unreadBooks := make([]book.Book, 0, len(books)/2)
+	const half = 2
+	roughUnreadBookCapacity := len(books) / half
+	unreadBooks := make([]book.Book, 0, roughUnreadBookCapacity)
 	historyComparator := newHistoryComparator(history)
+
 	for _, b := range books {
 		if !historyComparator.Contains(b) {
 			unreadBooks = append(unreadBooks, b)
 		}
 	}
+
 	return unreadBooks
 }
 

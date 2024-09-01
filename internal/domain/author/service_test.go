@@ -14,6 +14,7 @@ import (
 )
 
 func TestAddAuthor(t *testing.T) {
+	t.Parallel()
 	type fields struct {
 		authors func(*gomock.Controller) author.AuthorSaver
 	}
