@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"log/slog"
 	"net"
 	"os"
@@ -10,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 
 	"github.com/hrvadl/book-service/internal/cfg"
+	"github.com/hrvadl/book-service/internal/storage/db"
 )
 
 func New(cfg *cfg.Config, log *slog.Logger) *App {
@@ -31,6 +33,13 @@ func (a *App) MustRun() {
 }
 
 func (a *App) Run() error {
+	_, err := db.NewSQL(a.cfg.PostgresDSN)
+	if err != nil {
+		return fmt.Errorf("failed to init db: %w", err)
+	}
+
+	a.log.Info("Successfully connected to the PostgreSQL")
+
 	srv := fiber.New()
 	return srv.Listen(net.JoinHostPort(a.cfg.Host, a.cfg.Port))
 }

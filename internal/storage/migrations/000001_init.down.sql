@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS genres;
+
+DROP TABLE IF EXISTS users;
+
+DROP TABLE IF EXISTS user_favorite_genres;
+
+DROP TABLE IF EXISTS authors;
+
+DROP TABLE IF EXISTS books;
+
+DROP TABLE IF EXISTS book_authors;
+
+DROP TABLE IF EXISTS reviews;

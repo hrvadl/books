@@ -38,11 +38,9 @@ func TestAddBook(t *testing.T) {
 				book: book.Book{
 					Authors: []author.Author{
 						{
-							Name:    "Vadym",
-							Surname: "Hrashchenko",
-							BirthCountry: author.Country{
-								Name: "Ukraine",
-							},
+							Name:         "Vadym",
+							Surname:      "Hrashchenko",
+							BirthCountry: "Ukraine",
 						},
 					},
 				},
@@ -52,11 +50,9 @@ func TestAddBook(t *testing.T) {
 					book := book.Book{
 						Authors: []author.Author{
 							{
-								Name:    "Vadym",
-								Surname: "Hrashchenko",
-								BirthCountry: author.Country{
-									Name: "Ukraine",
-								},
+								Name:         "Vadym",
+								Surname:      "Hrashchenko",
+								BirthCountry: "Ukraine",
 							},
 						},
 					}
@@ -75,11 +71,9 @@ func TestAddBook(t *testing.T) {
 				book: book.Book{
 					Authors: []author.Author{
 						{
-							Name:    "Vadym",
-							Surname: "Hrashchenko",
-							BirthCountry: author.Country{
-								Name: "Ukraine",
-							},
+							Name:         "Vadym",
+							Surname:      "Hrashchenko",
+							BirthCountry: "Ukraine",
 						},
 					},
 				},
@@ -89,11 +83,9 @@ func TestAddBook(t *testing.T) {
 					book := book.Book{
 						Authors: []author.Author{
 							{
-								Name:    "Vadym",
-								Surname: "Hrashchenko",
-								BirthCountry: author.Country{
-									Name: "Ukraine",
-								},
+								Name:         "Vadym",
+								Surname:      "Hrashchenko",
+								BirthCountry: "Ukraine",
 							},
 						},
 					}

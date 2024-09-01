@@ -18,6 +18,7 @@ func NewFromEnv() (*Config, error) {
 }
 
 type Config struct {
-	Host string `env:"HOST,required,notEmpty"`
-	Port string `env:"PORT,required,notEmpty"`
+	Host        string `env:"HOST,required,notEmpty"`
+	Port        string `env:"PORT,required,notEmpty"`
+	PostgresDSN string `env:"POSTGRES_DSN,required,notEmpty"`
 }

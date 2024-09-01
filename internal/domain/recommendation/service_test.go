@@ -22,12 +22,10 @@ var books = []book.Book{
 		ID: 1,
 		Authors: []author.Author{
 			{
-				ID:      1,
-				Name:    "Taras",
-				Surname: "Shevchenko",
-				BirthCountry: author.Country{
-					Name: "Ukraine",
-				},
+				ID:           1,
+				Name:         "Taras",
+				Surname:      "Shevchenko",
+				BirthCountry: "Ukraine",
 			},
 		},
 		Title:  "Super book",
@@ -37,12 +35,10 @@ var books = []book.Book{
 		ID: 2,
 		Authors: []author.Author{
 			{
-				ID:      2,
-				Name:    "Alex",
-				Surname: "Shevchenko",
-				BirthCountry: author.Country{
-					Name: "Ukraine",
-				},
+				ID:           2,
+				Name:         "Alex",
+				Surname:      "Shevchenko",
+				BirthCountry: "Ukraine",
 			},
 		},
 		Title:  "Super book 2",
@@ -52,12 +48,10 @@ var books = []book.Book{
 		ID: 3,
 		Authors: []author.Author{
 			{
-				ID:      3,
-				Name:    "Eugene",
-				Surname: "Shevchenko",
-				BirthCountry: author.Country{
-					Name: "Ukraine",
-				},
+				ID:           3,
+				Name:         "Eugene",
+				Surname:      "Shevchenko",
+				BirthCountry: "Ukraine",
 			},
 		},
 		Title:  "Super book 3",
@@ -67,12 +61,10 @@ var books = []book.Book{
 		ID: 4,
 		Authors: []author.Author{
 			{
-				ID:      4,
-				Name:    "Max",
-				Surname: "Shevchenko",
-				BirthCountry: author.Country{
-					Name: "Ukraine",
-				},
+				ID:           4,
+				Name:         "Max",
+				Surname:      "Shevchenko",
+				BirthCountry: "Ukraine",
 			},
 		},
 		Title:  "Super book 4",
@@ -82,12 +74,10 @@ var books = []book.Book{
 		ID: 5,
 		Authors: []author.Author{
 			{
-				ID:      5,
-				Name:    "Taras",
-				Surname: "Shevchenko",
-				BirthCountry: author.Country{
-					Name: "Ukraine",
-				},
+				ID:           5,
+				Name:         "Taras",
+				Surname:      "Shevchenko",
+				BirthCountry: "Ukraine",
 			},
 		},
 		Title:  "Super book 5",
@@ -186,12 +176,10 @@ func TestGetRecommendedBook(t *testing.T) {
 				ID: 1,
 				Authors: []author.Author{
 					{
-						ID:      1,
-						Name:    "Taras",
-						Surname: "Shevchenko",
-						BirthCountry: author.Country{
-							Name: "Ukraine",
-						},
+						ID:           1,
+						Name:         "Taras",
+						Surname:      "Shevchenko",
+						BirthCountry: "Ukraine",
 					},
 				},
 				Title:  "Super book",

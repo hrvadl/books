@@ -1,3 +1,6 @@
 .env
+.task
+Dockerfile
+docker-compose.yaml
 .terraform
 key.json

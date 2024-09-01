@@ -1,0 +1,60 @@
+services:
+  pg:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready",
+          "-d",
+          "$POSTGRES_DB",
+          "-U",
+          "$POSTGRES_USER",
+        ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    volumes:
+      - db-data:/var/lib/postgresql
+    env_file:
+      - .env
+    networks:
+      - books
+
+  migrate:
+    image: migrate/migrate
+    restart: on-failure
+    depends_on:
+      pg:
+        condition: service_healthy
+    env_file:
+      - .env
+    networks:
+      - books
+    volumes:
+      - ./internal/storage/migrations:/database
+    command: ["-path", "/database", "-database", "${POSTGRES_DSN}", "up"]
+
+  app:
+    build: .
+    image: books
+    restart: on-failure
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    env_file:
+      - .env
+    networks:
+      - books
+    ports:
+      - 3000:3000
+
+volumes:
+  db-data:
+
+networks:
+  books:
+    driver: bridge

@@ -6,10 +6,6 @@ type Author struct {
 	ID           int
 	Name         string
 	Surname      string
-	BirthCountry Country
+	BirthCountry string
 	DateOfBirth  time.Time
-}
-
-type Country struct {
-	Name string
 }
