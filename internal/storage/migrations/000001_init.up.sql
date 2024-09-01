@@ -3,6 +3,8 @@ CREATE TABLE IF NOT EXISTS genres (
   name VARCHAR(100) NOT NULL
 );
 
+INSERT INTO genres (name) VALUES ('tech'), ('productivity'), ('roman');
+
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,

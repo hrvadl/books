@@ -13,6 +13,7 @@ output:
 linters:
   enable-all: true
   disable:
+    - execinquery
     - tagalign
     - godot
     - contextcheck # Check whether the function uses a non-inherited context

@@ -9,9 +9,15 @@ import (
 	"syscall"
 
 	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/logger"
 
 	"github.com/hrvadl/book-service/internal/cfg"
+	genredomain "github.com/hrvadl/book-service/internal/domain/genre"
+	userdomain "github.com/hrvadl/book-service/internal/domain/user"
 	"github.com/hrvadl/book-service/internal/storage/db"
+	genrestorage "github.com/hrvadl/book-service/internal/storage/repo/genres"
+	userstorage "github.com/hrvadl/book-service/internal/storage/repo/user"
+	usertransport "github.com/hrvadl/book-service/internal/transport/http/user"
 )
 
 func New(cfg *cfg.Config, log *slog.Logger) *App {
@@ -33,14 +39,28 @@ func (a *App) MustRun() {
 }
 
 func (a *App) Run() error {
-	_, err := db.NewSQL(a.cfg.PostgresDSN)
+	db, err := db.NewSQL(a.cfg.PostgresDSN)
 	if err != nil {
 		return fmt.Errorf("failed to init db: %w", err)
 	}
 
 	a.log.Info("Successfully connected to the PostgreSQL")
 
+	genresRepo := genrestorage.NewRepo(db)
+	genresService := genredomain.NewService(genresRepo)
+
+	usersRepo := userstorage.NewRepo(db)
+	usersService := userdomain.NewService(usersRepo, genresService)
+	usersHandler := usertransport.NewHandler(usersService)
+
 	srv := fiber.New()
+	srv.Use(logger.New())
+	v1 := srv.Group("/v1")
+
+	users := v1.Group("/users")
+	users.Post("/", usersHandler.CreateUser)
+	users.Get("/:id", usersHandler.GetByID)
+
 	return srv.Listen(net.JoinHostPort(a.cfg.Host, a.cfg.Port))
 }
 

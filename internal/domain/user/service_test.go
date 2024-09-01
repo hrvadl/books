@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
+	"github.com/hrvadl/book-service/internal/domain/genre"
 	"github.com/hrvadl/book-service/internal/domain/user"
 	"github.com/hrvadl/book-service/internal/domain/user/mocks"
 )
@@ -43,7 +44,7 @@ func TestServiceGetByID(t *testing.T) {
 						ID:              1,
 						Name:            "Vadym",
 						Email:           "vadym@vadym.com",
-						PreferredGenres: []string{"horror", "tech"},
+						PreferredGenres: []genre.Genre{{Name: "horror"}, {Name: "tech"}},
 					}, nil)
 					return us
 				},
@@ -53,7 +54,7 @@ func TestServiceGetByID(t *testing.T) {
 				ID:              1,
 				Name:            "Vadym",
 				Email:           "vadym@vadym.com",
-				PreferredGenres: []string{"horror", "tech"},
+				PreferredGenres: []genre.Genre{{Name: "horror"}, {Name: "tech"}},
 			},
 		},
 		{
