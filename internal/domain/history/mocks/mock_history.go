@@ -40,6 +40,21 @@ func (m *MockHistorySource) EXPECT() *MockHistorySourceMockRecorder {
 	return m.recorder
 }
 
+// Add mocks base method.
+func (m *MockHistorySource) Add(arg0 context.Context, arg1 history.ReadingHistory) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Add", arg0, arg1)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Add indicates an expected call of Add.
+func (mr *MockHistorySourceMockRecorder) Add(arg0, arg1 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockHistorySource)(nil).Add), arg0, arg1)
+}
+
 // GetByUserID mocks base method.
 func (m *MockHistorySource) GetByUserID(arg0 context.Context, arg1 int) ([]history.ReadingHistory, error) {
 	m.ctrl.T.Helper()

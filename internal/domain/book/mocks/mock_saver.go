@@ -54,18 +54,3 @@ func (mr *MockBookSourceMockRecorder) GetAll(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockBookSource)(nil).GetAll), arg0)
 }
-
-// Save mocks base method.
-func (m *MockBookSource) Save(arg0 context.Context, arg1 book.Book) (int, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Save", arg0, arg1)
-	ret0, _ := ret[0].(int)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Save indicates an expected call of Save.
-func (mr *MockBookSourceMockRecorder) Save(arg0, arg1 any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockBookSource)(nil).Save), arg0, arg1)
-}

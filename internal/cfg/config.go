@@ -18,7 +18,10 @@ func NewFromEnv() (*Config, error) {
 }
 
 type Config struct {
-	Host        string `env:"HOST,required,notEmpty"`
-	Port        string `env:"PORT,required,notEmpty"`
-	PostgresDSN string `env:"POSTGRES_DSN,required,notEmpty"`
+	Host         string `env:"HOST,required,notEmpty"`
+	Port         string `env:"PORT,required,notEmpty"`
+	PostgresDSN  string `env:"POSTGRES_DSN,required,notEmpty"`
+	GCPKeypath   string `env:"GCP_SERVICE_ACCOUNT_KEY,required,notEmpty"`
+	GCPProjectID string `env:"GCP_PROJECT_ID,required,notEmpty"`
+	FirestoreDB  string `env:"GCP_FIRESTORE_DB,required,notEmpty"`
 }

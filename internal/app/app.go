@@ -1,24 +1,31 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/logger"
 
 	"github.com/hrvadl/book-service/internal/cfg"
 	genredomain "github.com/hrvadl/book-service/internal/domain/genre"
+	historydomain "github.com/hrvadl/book-service/internal/domain/history"
 	userdomain "github.com/hrvadl/book-service/internal/domain/user"
 	"github.com/hrvadl/book-service/internal/storage/db"
 	genrestorage "github.com/hrvadl/book-service/internal/storage/repo/genres"
+	historystorage "github.com/hrvadl/book-service/internal/storage/repo/history"
 	userstorage "github.com/hrvadl/book-service/internal/storage/repo/user"
+	"github.com/hrvadl/book-service/internal/transport/http/history"
 	usertransport "github.com/hrvadl/book-service/internal/transport/http/user"
 )
+
+const timeout = 5 * time.Second
 
 func New(cfg *cfg.Config, log *slog.Logger) *App {
 	return &App{
@@ -39,17 +46,28 @@ func (a *App) MustRun() {
 }
 
 func (a *App) Run() error {
-	db, err := db.NewSQL(a.cfg.PostgresDSN)
-	if err != nil {
-		return fmt.Errorf("failed to init db: %w", err)
-	}
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
 
+	pg, err := db.NewSQL(ctx, a.cfg.PostgresDSN)
+	if err != nil {
+		return fmt.Errorf("failed to init postgres: %w", err)
+	}
 	a.log.Info("Successfully connected to the PostgreSQL")
 
-	genresRepo := genrestorage.NewRepo(db)
+	firestore, err := db.NewFirestore(ctx, a.cfg.GCPKeypath, a.cfg.GCPProjectID, a.cfg.FirestoreDB)
+	if err != nil {
+		return fmt.Errorf("failed to init postgres: %w", err)
+	}
+
+	historyRepo := historystorage.NewRepo(firestore)
+	historyService := historydomain.NewService(historyRepo)
+	historyHandler := history.NewHandler(historyService)
+
+	genresRepo := genrestorage.NewRepo(pg)
 	genresService := genredomain.NewService(genresRepo)
 
-	usersRepo := userstorage.NewRepo(db)
+	usersRepo := userstorage.NewRepo(pg)
 	usersService := userdomain.NewService(usersRepo, genresService)
 	usersHandler := usertransport.NewHandler(usersService)
 
@@ -60,6 +78,9 @@ func (a *App) Run() error {
 	users := v1.Group("/users")
 	users.Post("/", usersHandler.CreateUser)
 	users.Get("/:id", usersHandler.GetByID)
+
+	histories := v1.Group("/history")
+	histories.Post("/:userID/:bookID", historyHandler.Add)
 
 	return srv.Listen(net.JoinHostPort(a.cfg.Host, a.cfg.Port))
 }

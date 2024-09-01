@@ -1,4 +1,5 @@
 .env
+.env.*
 .task
 Dockerfile
 docker-compose.yaml

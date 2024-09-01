@@ -40,6 +40,21 @@ func (m *MockUserSource) EXPECT() *MockUserSourceMockRecorder {
 	return m.recorder
 }
 
+// Create mocks base method.
+func (m *MockUserSource) Create(arg0 context.Context, arg1 user.User) (int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", arg0, arg1)
+	ret0, _ := ret[0].(int)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockUserSourceMockRecorder) Create(arg0, arg1 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserSource)(nil).Create), arg0, arg1)
+}
+
 // GetByID mocks base method.
 func (m *MockUserSource) GetByID(arg0 context.Context, arg1 int) (*user.User, error) {
 	m.ctrl.T.Helper()

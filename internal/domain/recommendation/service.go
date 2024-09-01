@@ -8,6 +8,7 @@ import (
 	"golang.org/x/exp/maps"
 
 	"github.com/hrvadl/book-service/internal/domain/book"
+	"github.com/hrvadl/book-service/internal/domain/genre"
 	"github.com/hrvadl/book-service/internal/domain/history"
 	"github.com/hrvadl/book-service/internal/domain/review"
 	"github.com/hrvadl/book-service/internal/domain/user"
@@ -78,7 +79,7 @@ func (s *Service) GetRecommendedBookFor(ctx context.Context, userID int) (*book.
 
 	// TODO: use specification?
 	unreadBooks := s.getUnreadBooks(history, books)
-	preferredGenres := user.PreferredGenres
+	preferredGenres := getGenresNames(user.PreferredGenres)
 	likedAuthorsIDs := s.getLikedAuthors(reviews)
 
 	recommendedBook := s.getBookWithPrefferedGenresOrAuthors(
@@ -99,8 +100,9 @@ func (s *Service) getBookWithPrefferedGenresOrAuthors(
 	authorIDs []int,
 ) *book.Book {
 	for _, b := range books {
+		bookGenresNames := getGenresNames(b.Genres)
 		for _, g := range genres {
-			if slices.Contains(b.Genres, g) {
+			if slices.Contains(bookGenresNames, g) {
 				return &b
 			}
 		}
@@ -139,4 +141,12 @@ func (s *Service) getLikedAuthors(reviews []review.Review) []int {
 	}
 
 	return maps.Keys(likedAuthors)
+}
+
+func getGenresNames(genres []genre.Genre) []string {
+	names := make([]string, 0, len(genres))
+	for _, g := range genres {
+		names = append(names, g.Name)
+	}
+	return names
 }
