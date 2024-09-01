@@ -20,7 +20,7 @@ variable books_database_instance_name {
 
 variable firestore_database_name {
   type = string
-  default = "read-history-for-books-app-hrvadl"
+  default = "read-history-for-books-app-hrvadl1"
 }
 
 variable cloudrun_service_name {
