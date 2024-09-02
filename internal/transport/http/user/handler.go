@@ -8,12 +8,19 @@ import (
 
 	"github.com/hrvadl/book-service/internal/domain/genre"
 	"github.com/hrvadl/book-service/internal/domain/user"
+	"github.com/hrvadl/book-service/internal/transport/pubsub/subscribers/review"
 )
 
-func NewHandler(us UsersService) *Handler {
+func NewHandler(us UsersService, upub UserCreatedPublisher) *Handler {
 	return &Handler{
-		users: us,
+		users:     us,
+		publisher: upub,
 	}
+}
+
+// TODO: add transactional outbox
+type UserCreatedPublisher interface {
+	Publish(ctx context.Context, r review.UserAddedMessage) error
 }
 
 type UsersService interface {
@@ -22,7 +29,8 @@ type UsersService interface {
 }
 
 type Handler struct {
-	users UsersService
+	users     UsersService
+	publisher UserCreatedPublisher
 }
 
 type createUserRequest struct {
@@ -55,6 +63,11 @@ func (h *Handler) CreateUser(ctx fiber.Ctx) error {
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
+
+	_ = h.publisher.Publish(ctx.Context(), review.UserAddedMessage{
+		Name:  req.Name,
+		Email: req.Email,
+	})
 
 	return ctx.JSON(createUserResponse{id})
 }

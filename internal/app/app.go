@@ -27,8 +27,9 @@ import (
 )
 
 const (
-	timeout = 5 * time.Second
-	subName = "user_added"
+	timeout   = 5 * time.Second
+	subName   = "user_added"
+	topicName = subName
 )
 
 func New(cfg *cfg.Config, log *slog.Logger) *App {
@@ -65,7 +66,7 @@ func (a *App) Run() error {
 	}
 	a.log.Info("Successfully connected to the Firestore")
 
-	sub, err := review.NewSubscriber(ctx, review.Options{
+	sub, err := review.NewSubscriber(ctx, review.SubOptions{
 		Filename:         a.cfg.GCPKeypath,
 		ProjectID:        a.cfg.GCPProjectID,
 		SubscriptionName: subName,
@@ -76,6 +77,15 @@ func (a *App) Run() error {
 	go sub.Subscribe(context.Background())
 	a.log.Info("Successfully connected to the Pub/Sub")
 
+	pub, err := review.NewPublisher(ctx, review.PubOptions{
+		Filename:  a.cfg.GCPKeypath,
+		ProjectID: a.cfg.GCPProjectID,
+		Topic:     topicName,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to create pub/sub publisher: %w", err)
+	}
+
 	historyRepo := historystorage.NewRepo(firestore)
 	historyService := historydomain.NewService(historyRepo)
 	historyHandler := history.NewHandler(historyService)
@@ -85,7 +95,7 @@ func (a *App) Run() error {
 
 	usersRepo := userstorage.NewRepo(pg)
 	usersService := userdomain.NewService(usersRepo, genresService)
-	usersHandler := usertransport.NewHandler(usersService)
+	usersHandler := usertransport.NewHandler(usersService, pub)
 
 	srv := fiber.New()
 	srv.Use(logger.New())

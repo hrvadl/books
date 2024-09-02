@@ -9,8 +9,7 @@ import (
 )
 
 // TODO:
-// 1. Add transport layer
-// 2. Add data layer
+// 1. Add pub/sub publisher
 func main() {
 	log := slog.New(slog.NewTextHandler(os.Stdout, nil))
 	cfg, err := cfg.NewFromEnv()

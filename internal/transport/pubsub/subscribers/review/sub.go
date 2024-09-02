@@ -8,13 +8,13 @@ import (
 	"google.golang.org/api/option"
 )
 
-type Options struct {
+type SubOptions struct {
 	Filename         string
 	ProjectID        string
 	SubscriptionName string
 }
 
-func NewSubscriber(ctx context.Context, opt Options) (*Subscriber, error) {
+func NewSubscriber(ctx context.Context, opt SubOptions) (*Subscriber, error) {
 	sa := option.WithCredentialsFile(opt.Filename)
 	client, err := pubsub.NewClient(ctx, opt.ProjectID, sa)
 	if err != nil {
