@@ -23,9 +23,13 @@ import (
 	userstorage "github.com/hrvadl/book-service/internal/storage/repo/user"
 	"github.com/hrvadl/book-service/internal/transport/http/history"
 	usertransport "github.com/hrvadl/book-service/internal/transport/http/user"
+	"github.com/hrvadl/book-service/internal/transport/pubsub/subscribers/review"
 )
 
-const timeout = 5 * time.Second
+const (
+	timeout = 5 * time.Second
+	subName = "user_added"
+)
 
 func New(cfg *cfg.Config, log *slog.Logger) *App {
 	return &App{
@@ -59,6 +63,18 @@ func (a *App) Run() error {
 	if err != nil {
 		return fmt.Errorf("failed to init postgres: %w", err)
 	}
+	a.log.Info("Successfully connected to the Firestore")
+
+	sub, err := review.NewSubscriber(ctx, review.Options{
+		Filename:         a.cfg.GCPKeypath,
+		ProjectID:        a.cfg.GCPProjectID,
+		SubscriptionName: subName,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to create pub/sub subcription: %w", err)
+	}
+	go sub.Subscribe(context.Background())
+	a.log.Info("Successfully connected to the Pub/Sub")
 
 	historyRepo := historystorage.NewRepo(firestore)
 	historyService := historydomain.NewService(historyRepo)

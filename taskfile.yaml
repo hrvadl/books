@@ -9,7 +9,7 @@ tasks:
     desc: "Populate env from .env file and run service"
     deps: [install:godotenv]
     cmds:
-      - godotenv -f .env task run-with-env
+      - godotenv -f .env.local task run-with-env
   run-with-env:
     desc: "run service"
     required:
